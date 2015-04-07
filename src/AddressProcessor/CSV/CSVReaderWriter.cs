@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using AddressProcessing.Address;
 using AddressProcessing.Contracts;
 
 namespace AddressProcessing.CSV
@@ -43,20 +44,13 @@ namespace AddressProcessing.CSV
             column1 = null;
             column2 = null;
 
-            var columns = _csvReader.Read().ToList();
+            var contact = _csvReader.Read();
 
-            if (!columns.Any())
+            if (contact is NullContact)
                 return false;
 
-            if (columns.Count == 1)
-            {
-                column1 = columns[0];
-            }
-
-            if (columns.Count > 1)
-            {
-                column2 = columns[1];
-            }
+            column1 = contact.Name;
+            column2 = contact.Address;
                 
             return true;
         }

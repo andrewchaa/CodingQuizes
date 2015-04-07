@@ -1,14 +1,26 @@
-using AddressProcessing.Address.v1;
+using AddressProcessing.Address.v2;
 
 namespace AddressProcessing.Tests.TestDoubles
 {
     internal class FakeMailShotService : IMailShot
     {
-        internal int Counter { get; private set; }
+        internal int PostalMailShotCounter { get; private set; }
+        internal int EmailMailShotCounter { get; private set; }
+        internal int SmsMailShotCounter { get; private set; }
 
-        public void SendMailShot(string name, string address, string phone, string email)
+        public void SendPostalMailShot(string name, string address1, string town, string county, string country, string postCode)
         {
-            Counter++;
+            PostalMailShotCounter++;
+        }
+
+        public void SendEmailMailShot(string name, string email)
+        {
+            EmailMailShotCounter++;
+        }
+
+        public void SendSmsMailShot(string name, string number)
+        {
+            SmsMailShotCounter++;
         }
     }
 }

@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace AddressProcessing.Tests
 {
     [TestFixture]
-    public class AddressRecordTests
+    public class AddressParserTests
     {
         [Test]
         public void It_should_parse_pipe_delimitted_address_string()

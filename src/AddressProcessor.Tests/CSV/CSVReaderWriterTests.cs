@@ -1,4 +1,5 @@
-﻿using AddressProcessing.Contracts;
+﻿using AddressProcessing.Address;
+using AddressProcessing.Contracts;
 using AddressProcessing.CSV;
 using Moq;
 using NUnit.Framework;
@@ -8,17 +9,19 @@ namespace AddressProcessing.Tests.CSV
     [TestFixture]
     public class CSVReaderWriterTests
     {
-        private Mock<IReadCsv> _csvReader;
+        private IReadCsv _csvReader;
         private Mock<IWriteCsv> _csvWriter;
         private CSVReaderWriter _csvReaderWriter;
+        private Mock<IReadStream> _csvStreamReader;
         const string FileName = "fileName";
 
         [SetUp]
         public void SetUp()
         {
-            _csvReader = new Mock<IReadCsv>();
+            _csvStreamReader = new Mock<IReadStream>();
+            _csvReader = new CsvReader(_csvStreamReader.Object, new ContactParser());
             _csvWriter = new Mock<IWriteCsv>();
-            _csvReaderWriter = new CSVReaderWriter(_csvReader.Object, _csvWriter.Object);
+            _csvReaderWriter = new CSVReaderWriter(_csvReader, _csvWriter.Object);
         }
 
         [Test]
@@ -30,7 +33,7 @@ namespace AddressProcessing.Tests.CSV
             _csvReaderWriter.Open(FileName, Mode.Read);
 
             //assert
-            _csvReader.Verify(s => s.Open(FileName));
+            _csvStreamReader.Verify(s => s.Open(FileName));
         }
 
         [Test]
@@ -56,7 +59,7 @@ namespace AddressProcessing.Tests.CSV
             _csvReaderWriter.Read(out col1, out col2);
 
             // assert
-            _csvReader.Verify(c => c.Read());
+            _csvStreamReader.Verify(c => c.ReadLine());
         }
 
         [Test]
@@ -83,7 +86,7 @@ namespace AddressProcessing.Tests.CSV
             _csvReaderWriter.Close();
 
             //assert
-            _csvReader.Verify(c => c.Close());
+            _csvStreamReader.Verify(c => c.Close());
         }
 
         [Test]

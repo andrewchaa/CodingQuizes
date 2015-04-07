@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using AddressProcessing.Address.v1;
+using AddressProcessing.Address.v2;
 using AddressProcessing.Contracts;
 
 namespace AddressProcessing.Address
@@ -8,22 +8,29 @@ namespace AddressProcessing.Address
     {
         private readonly IMailShot _mailShot;
         private readonly IReadCsv _csvReader;
+        private readonly IParseAddress _addressParser;
 
-        public AddressFileProcessor(IMailShot mailShot, IReadCsv csvReader)
+        public AddressFileProcessor(IMailShot mailShot, IReadCsv csvReader, IParseAddress addressParser)
         {
             _mailShot = mailShot;
             _csvReader = csvReader;
+            _addressParser = addressParser;
         }
 
         public void Process(string inputFile)
         {
             _csvReader.Open(inputFile);
 
-            var columns = _csvReader.Read().ToList();
-            while (columns.Any())
+            var contact = _csvReader.Read();
+            var address = _addressParser.Parse(contact.Address);
+
+            while (!(contact is NullContact))
             {
-                _mailShot.SendMailShot(columns[0], columns[1], columns[2], columns[3]);
-                columns = _csvReader.Read().ToList();
+                _mailShot.SendPostalMailShot(contact.Name, address.Address, address.City, address.Province, address.Country, address.PostCode);
+                _mailShot.SendEmailMailShot(contact.Name, contact.Email);
+                _mailShot.SendSmsMailShot(contact.Name, contact.Phone);
+
+                contact = _csvReader.Read();
             }
 
             _csvReader.Close();
