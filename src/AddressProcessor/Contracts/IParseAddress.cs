@@ -4,6 +4,6 @@ namespace AddressProcessing.Contracts
 {
     public interface IParseAddress
     {
-        AddressRecord Parse(string address);
+        AddressRecord Parse(string input);
     }
 }

@@ -6,16 +6,22 @@ namespace AddressProcessing.Address
 {
     public class AddressParser : IParseAddress
     {
-        public AddressRecord Parse(string address)
+        public AddressRecord Parse(string input)
         {
-            var columns = address.Split('|').ToList();
-
-            while (columns.Count < 5)
+            var columns = input.Split('\t').ToList();
+            while (columns.Count < 4)
             {
                 columns.Add(string.Empty);
             }
 
-            return new AddressRecord(columns[0], columns[1], columns[2], columns[3], columns[4]);
+            var addressColumns = columns[1].Split('|').ToList();
+            while (addressColumns.Count < 5)
+            {
+                addressColumns.Add(string.Empty);
+            }
+
+            return new AddressRecord(addressColumns[0], addressColumns[1], addressColumns[2], addressColumns[3], addressColumns[4], 
+                columns[0], columns[2], columns[3]);
         }
     }
 }
