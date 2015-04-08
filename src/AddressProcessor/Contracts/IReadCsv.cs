@@ -7,7 +7,7 @@ namespace AddressProcessing.Contracts
     public interface IReadCsv
     {
         void Open(string inputFile);
-        Contact Read();
+        IEnumerable<string> Read();
         void Close();
     }
 }

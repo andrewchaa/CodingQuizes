@@ -17,7 +17,7 @@ namespace AddressProcessing.Tests.CSV
         public void SetUp()
         {
             _streamReader = new Mock<IReadStream>();
-            _csvReader = new CsvReader(_streamReader.Object, new ContactParser());
+            _csvReader = new CsvReader(_streamReader.Object);
         }
 
         [Test]
@@ -42,11 +42,11 @@ namespace AddressProcessing.Tests.CSV
             _streamReader.Setup(s => s.ReadLine()).Returns(column1 + "\t" + column2);
 
             // act
-            var contact = _csvReader.Read();
+            var columns = _csvReader.Read().ToList();
 
             // assert
-            Assert.That(contact.Name, Is.EqualTo(column1));
-            Assert.That(contact.Address, Is.EqualTo(column2));
+            Assert.That(columns[0], Is.EqualTo(column1));
+            Assert.That(columns[1], Is.EqualTo(column2));
         }
 
         [Test]
@@ -56,10 +56,10 @@ namespace AddressProcessing.Tests.CSV
             _streamReader.Setup(s => s.ReadLine()).Returns(null as string);
 
             // act
-            var contact = _csvReader.Read();
+            var columns = _csvReader.Read();
 
             // assert
-            Assert.That(contact, Is.AssignableTo<NullContact>());
+            Assert.That(columns, Is.Empty);
         }
 
         [Test]
@@ -69,10 +69,10 @@ namespace AddressProcessing.Tests.CSV
             _streamReader.Setup(s => s.ReadLine()).Returns(string.Empty);
 
             // act
-            var contact = _csvReader.Read();
+            var columns = _csvReader.Read();
 
             // assert
-            Assert.That(contact, Is.AssignableTo<NullContact>());
+            Assert.That(columns, Is.Empty);
         }
 
         [Test]

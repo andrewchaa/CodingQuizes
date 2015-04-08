@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AddressProcessing.Address;
 using AddressProcessing.Contracts;
 
@@ -8,12 +9,10 @@ namespace AddressProcessing.CSV
     public class CsvReader : IReadCsv
     {
         private readonly IReadStream _streamReader;
-        private readonly IParseContact _contactParser;
 
-        public CsvReader(IReadStream streamReader, IParseContact contactParser)
+        public CsvReader(IReadStream streamReader)
         {
             _streamReader = streamReader;
-            _contactParser = contactParser;
         }
 
         public void Open(string fileName)
@@ -21,14 +20,20 @@ namespace AddressProcessing.CSV
             _streamReader.Open(fileName);
         }
 
-        public Contact Read()
+        public IEnumerable<string> Read()
         {
-            var line = _streamReader.ReadLine();
+            var input = _streamReader.ReadLine();
 
-            if (string.IsNullOrEmpty(line))
-                return new NullContact();
+            if (string.IsNullOrEmpty(input))
+                return new List<string>();
 
-            return _contactParser.Parse(line);
+            var columns = input.Split('\t').ToList();
+            while (columns.Count < 4)
+            {
+                columns.Add(string.Empty);
+            }
+
+            return columns;
         }
 
         public void Close()

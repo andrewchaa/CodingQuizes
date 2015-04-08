@@ -19,7 +19,7 @@ namespace AddressProcessing.Tests
         public void SetUp()
         {
             _fakeMailShotService = new FakeMailShotService();
-            _csvReader = new CsvReader(new CsvStreamReader(), new ContactParser());
+            _csvReader = new CsvReader(new CsvStreamReader());
             _addressParser = new AddressParser();
         }
 

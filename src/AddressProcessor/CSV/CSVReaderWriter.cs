@@ -44,13 +44,12 @@ namespace AddressProcessing.CSV
             column1 = null;
             column2 = null;
 
-            var contact = _csvReader.Read();
-
-            if (contact is NullContact)
+            var columns = _csvReader.Read().ToList();
+            if (columns.Count == 0)
                 return false;
 
-            column1 = contact.Name;
-            column2 = contact.Address;
+            column1 = columns[0];
+            column2 = columns[1];
                 
             return true;
         }

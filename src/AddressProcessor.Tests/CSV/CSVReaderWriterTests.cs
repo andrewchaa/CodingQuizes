@@ -19,7 +19,7 @@ namespace AddressProcessing.Tests.CSV
         public void SetUp()
         {
             _csvStreamReader = new Mock<IReadStream>();
-            _csvReader = new CsvReader(_csvStreamReader.Object, new ContactParser());
+            _csvReader = new CsvReader(_csvStreamReader.Object);
             _csvWriter = new Mock<IWriteCsv>();
             _csvReaderWriter = new CSVReaderWriter(_csvReader, _csvWriter.Object);
         }

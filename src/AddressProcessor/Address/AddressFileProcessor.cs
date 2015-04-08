@@ -21,16 +21,18 @@ namespace AddressProcessing.Address
         {
             _csvReader.Open(inputFile);
 
-            var contact = _csvReader.Read();
-            var address = _addressParser.Parse(contact.Address);
+            var columns = _csvReader.Read().ToList();
 
-            while (!(contact is NullContact))
+            while (columns.Count > 0)
             {
+                var address = _addressParser.Parse(columns[1]);
+                var contact = new Contact(columns[0], address, columns[2], columns[3]);
+
                 _mailShot.SendPostalMailShot(contact.Name, address.Address, address.City, address.Province, address.Country, address.PostCode);
                 _mailShot.SendEmailMailShot(contact.Name, contact.Email);
                 _mailShot.SendSmsMailShot(contact.Name, contact.Phone);
 
-                contact = _csvReader.Read();
+                columns = _csvReader.Read().ToList();
             }
 
             _csvReader.Close();

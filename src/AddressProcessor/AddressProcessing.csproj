@@ -55,8 +55,6 @@
     <Compile Include="Address\AddressRecord.cs" />
     <Compile Include="Address\AddressFileProcessor.cs" />
     <Compile Include="Address\Contact.cs" />
-    <Compile Include="Address\ContactParser.cs" />
-    <Compile Include="Address\IParseContact.cs" />
     <Compile Include="Address\NullContact.cs" />
     <Compile Include="CSV\CsvWriter.cs" />
     <Compile Include="CSV\CsvReader.cs" />

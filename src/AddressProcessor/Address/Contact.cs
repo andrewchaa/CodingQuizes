@@ -3,11 +3,11 @@
     public class Contact
     {
         public string Name { get; private set; }
-        public string Address { get; set; }
+        public AddressRecord Address { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
 
-        public Contact(string name, string address, string phone, string email)
+        public Contact(string name, AddressRecord address, string phone, string email)
         {
             Name = name;
             Address = address;
